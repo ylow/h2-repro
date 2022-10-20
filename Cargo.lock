@@ -170,6 +170,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "h2-repro"
+version = "0.1.0"
+dependencies = [
+ "color-eyre",
+ "hyper",
+ "lazy_static",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "hashbrown"
 version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -429,18 +441,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fb5a58c1855b4b6819d59012155603f0b22ad30cad752600aadfcb695265519a"
 dependencies = [
  "bitflags",
-]
-
-[[package]]
-name = "repro"
-version = "0.1.0"
-dependencies = [
- "color-eyre",
- "hyper",
- "lazy_static",
- "tokio",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]

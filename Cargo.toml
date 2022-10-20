@@ -1,5 +1,5 @@
 [package]
-name = "repro"
+name = "h2-repro"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 color-eyre = "0.6.2"
-hyper = { version = "0.14.20", features = ["server", "http2", "tcp"] }
+hyper = { version = "0.14.20", features = ["client", "server", "http2", "tcp"] }
 lazy_static = "1.4.0"
 tokio = { version = "1.21.2", features = ["full"] }
 tracing = "0.1.37"
