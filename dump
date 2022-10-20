@@ -1,0 +1,79 @@
+== Info:   Trying 127.0.0.1:6400...
+== Info: Connected to localhost (127.0.0.1) port 6400 (#0)
+== Info: Using HTTP2, server supports multiplexing
+== Info: Connection state changed (HTTP/2 confirmed)
+== Info: Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
+== Info: Using Stream ID: 1 (easy handle 0x56063cc76a70)
+=> Send header, 76 bytes (0x4c)
+0000: 47 45 54 20 2f 20 48 54 54 50 2f 32 0d 0a 48 6f GET / HTTP/2..Ho
+0010: 73 74 3a 20 6c 6f 63 61 6c 68 6f 73 74 3a 36 34 st: localhost:64
+0020: 30 30 0d 0a 75 73 65 72 2d 61 67 65 6e 74 3a 20 00..user-agent: 
+0030: 63 75 72 6c 2f 37 2e 38 31 2e 30 0d 0a 61 63 63 curl/7.81.0..acc
+0040: 65 70 74 3a 20 2a 2f 2a 0d 0a 0d 0a             ept: */*....
+== Info: Found bundle for host localhost: 0x56063cc6d840 [can multiplex]
+== Info: Multiplexed connection found!
+== Info: Re-using existing connection! (#0) with host localhost
+== Info: Using Stream ID: 3 (easy handle 0x56063cc77f90)
+=> Send header, 76 bytes (0x4c)
+0000: 47 45 54 20 2f 20 48 54 54 50 2f 32 0d 0a 48 6f GET / HTTP/2..Ho
+0010: 73 74 3a 20 6c 6f 63 61 6c 68 6f 73 74 3a 36 34 st: localhost:64
+0020: 30 30 0d 0a 75 73 65 72 2d 61 67 65 6e 74 3a 20 00..user-agent: 
+0030: 63 75 72 6c 2f 37 2e 38 31 2e 30 0d 0a 61 63 63 curl/7.81.0..acc
+0040: 65 70 74 3a 20 2a 2f 2a 0d 0a 0d 0a             ept: */*....
+== Info: Found bundle for host localhost: 0x56063cc6d840 [can multiplex]
+== Info: Multiplexed connection found!
+== Info: Re-using existing connection! (#0) with host localhost
+== Info: Using Stream ID: 5 (easy handle 0x56063cc79790)
+=> Send header, 76 bytes (0x4c)
+0000: 47 45 54 20 2f 20 48 54 54 50 2f 32 0d 0a 48 6f GET / HTTP/2..Ho
+0010: 73 74 3a 20 6c 6f 63 61 6c 68 6f 73 74 3a 36 34 st: localhost:64
+0020: 30 30 0d 0a 75 73 65 72 2d 61 67 65 6e 74 3a 20 00..user-agent: 
+0030: 63 75 72 6c 2f 37 2e 38 31 2e 30 0d 0a 61 63 63 curl/7.81.0..acc
+0040: 65 70 74 3a 20 2a 2f 2a 0d 0a 0d 0a             ept: */*....
+== Info: Connection state changed (MAX_CONCURRENT_STREAMS == 4294967295)!
+<= Recv header, 13 bytes (0xd)
+0000: 48 54 54 50 2f 32 20 32 30 30 20 0d 0a          HTTP/2 200 ..
+<= Recv header, 37 bytes (0x25)
+0000: 64 61 74 65 3a 20 54 68 75 2c 20 32 30 20 4f 63 date: Thu, 20 Oc
+0010: 74 20 32 30 32 32 20 31 37 3a 33 33 3a 32 38 20 t 2022 17:33:28 
+0020: 47 4d 54 0d 0a                                  GMT..
+<= Recv header, 2 bytes (0x2)
+0000: 0d 0a                                           ..
+<= Recv data, 17 bytes (0x11)
+0000: 74 68 69 73 20 77 69 6c 6c 20 66 61 69 6c 2e 2e this will fail..
+0010: 2e                                              .
+<= Recv header, 13 bytes (0xd)
+0000: 48 54 54 50 2f 32 20 32 30 30 20 0d 0a          HTTP/2 200 ..
+<= Recv header, 37 bytes (0x25)
+0000: 64 61 74 65 3a 20 54 68 75 2c 20 32 30 20 4f 63 date: Thu, 20 Oc
+0010: 74 20 32 30 32 32 20 31 37 3a 33 33 3a 32 38 20 t 2022 17:33:28 
+0020: 47 4d 54 0d 0a                                  GMT..
+<= Recv header, 2 bytes (0x2)
+0000: 0d 0a                                           ..
+<= Recv header, 13 bytes (0xd)
+0000: 48 54 54 50 2f 32 20 32 30 30 20 0d 0a          HTTP/2 200 ..
+<= Recv header, 37 bytes (0x25)
+0000: 64 61 74 65 3a 20 54 68 75 2c 20 32 30 20 4f 63 date: Thu, 20 Oc
+0010: 74 20 32 30 32 32 20 31 37 3a 33 33 3a 32 38 20 t 2022 17:33:28 
+0020: 47 4d 54 0d 0a                                  GMT..
+<= Recv header, 2 bytes (0x2)
+0000: 0d 0a                                           ..
+<= Recv data, 34 bytes (0x22)
+0000: 74 68 69 73 20 77 69 6c 6c 20 66 61 69 6c 2e 2e this will fail..
+0010: 2e 74 68 69 73 20 77 69 6c 6c 20 66 61 69 6c 2e .this will fail.
+0020: 2e 2e                                           ..
+<= Recv data, 34 bytes (0x22)
+0000: 74 68 69 73 20 77 69 6c 6c 20 66 61 69 6c 2e 2e this will fail..
+0010: 2e 74 68 69 73 20 77 69 6c 6c 20 66 61 69 6c 2e .this will fail.
+0020: 2e 2e                                           ..
+<= Recv data, 17 bytes (0x11)
+0000: 74 68 69 73 20 77 69 6c 6c 20 66 61 69 6c 2e 2e this will fail..
+0010: 2e                                              .
+== Info: HTTP/2 stream 0 was not closed cleanly: INTERNAL_ERROR (err 2)
+== Info: stopped the pause stream!
+== Info: HTTP/2 stream 0 was not closed cleanly: INTERNAL_ERROR (err 2)
+== Info: stopped the pause stream!
+<= Recv data, 17 bytes (0x11)
+0000: 74 68 69 73 20 73 68 6f 75 6c 64 20 77 6f 72 6b this should work
+0010: 21                                              !
+== Info: Connection #0 to host localhost left intact
