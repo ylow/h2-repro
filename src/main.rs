@@ -1,10 +1,13 @@
-use std::{convert::Infallible, str::FromStr, time::Duration};
+use std::{convert::Infallible, net::TcpListener, str::FromStr, time::Duration};
 
+use color_eyre::eyre;
 use hyper::{
     body::Bytes,
+    client::HttpConnector,
     service::{make_service_fn, service_fn},
     Body, Client, Method, Request, Response,
 };
+use tokio::sync::mpsc;
 use tracing::{error, info};
 use tracing_subscriber::{filter::Targets, layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -13,7 +16,7 @@ async fn main() {
     real_main().await.unwrap()
 }
 
-async fn real_main() -> color_eyre::Result<()> {
+async fn real_main() -> eyre::Result<()> {
     color_eyre::install().unwrap();
 
     let filter_layer =
@@ -24,19 +27,28 @@ async fn real_main() -> color_eyre::Result<()> {
         .with(format_layer)
         .init();
 
-    let h2_only: bool = std::env::var("H2_ONLY").map(|s| s == "1").unwrap_or(false);
     let h2_max_streams: u32 = std::env::var("H2_MAX_STREAMS")
         .map(|s| s.parse().unwrap())
-        .unwrap_or(20);
+        .unwrap_or(50);
     let h2_requests = std::env::var("H2_REQUESTS")
         .map(|s| s.parse().unwrap())
-        .unwrap_or(30);
+        .unwrap_or(100);
 
-    info!("H2_ONLY={h2_only}, H2_MAX_STREAMS={h2_max_streams}, H2_REQUESTS={h2_requests}");
-    info!("(Use environment variables to adjust)");
+    info!("{h2_requests} requests on {h2_max_streams} streams");
+    info!("(Set $H2_REQUESTS and $H2_MAX_STREAMS environment variables to adjust)");
 
-    let addr = "[::]:6400".parse()?;
-    let server = hyper::server::Server::bind(&addr)
+    run_test(false, h2_max_streams, h2_requests).await?;
+    run_test(true, h2_max_streams, h2_requests).await?;
+
+    Ok(())
+}
+
+async fn run_test(h2_only: bool, h2_max_streams: u32, h2_requests: u32) -> eyre::Result<()> {
+    let prefix = if h2_only { "H2" } else { "H1" };
+
+    let ln = TcpListener::bind("[::]:0")?;
+    let addr = ln.local_addr()?;
+    let server = hyper::server::Server::from_tcp(ln)?
         .http2_max_concurrent_streams(h2_max_streams)
         .http2_only(h2_only)
         .serve(make_service_fn(|_conn| async {
@@ -47,39 +59,40 @@ async fn real_main() -> color_eyre::Result<()> {
         server.await.unwrap();
     });
 
-    info!("Listening on {addr:?}");
-
     let client = Client::builder().http2_only(h2_only).build_http::<Body>();
 
-    let (tx, mut rx) = tokio::sync::mpsc::channel(4096);
+    let (tx, mut rx) = mpsc::channel::<eyre::Result<()>>(4096);
 
     let body = Bytes::from(vec![0u8; 65535 + 1]);
 
+    async fn do_one_request(req: Request<Body>, client: Client<HttpConnector>) -> eyre::Result<()> {
+        let res = client.request(req).await?;
+        _ = hyper::body::to_bytes(res.into_body()).await?;
+        Ok(())
+    }
+
     for _ in 0..h2_requests {
         let req = Request::builder()
-            .uri("http://localhost:6400")
+            .uri(format!("http://{addr}"))
             .method(Method::POST)
             .body(Body::from(body.clone()))?;
+        let fut = do_one_request(req, client.clone());
         let tx = tx.clone();
-        let client = client.clone();
-        tokio::spawn(async move {
-            let res = client.request(req).await.unwrap();
-            let _body = hyper::body::to_bytes(res.into_body()).await.unwrap();
-            _ = tx.send(()).await;
-        });
+        tokio::spawn(async move { _ = tx.send(fut.await).await });
     }
     drop(tx);
 
     let mut complete_reqs = 0;
 
-    while let Ok(Some(_)) = tokio::time::timeout(Duration::from_millis(500), rx.recv()).await {
+    while let Ok(Some(res)) = tokio::time::timeout(Duration::from_millis(500), rx.recv()).await {
+        res?;
         complete_reqs += 1;
     }
 
     if complete_reqs != h2_requests {
-        error!("Stuck at {complete_reqs} / {h2_requests}");
+        error!("{prefix}: Stuck at {complete_reqs} / {h2_requests}");
     } else {
-        info!("Completed {complete_reqs} / {h2_requests}");
+        info!("{prefix}: Completed {complete_reqs} / {h2_requests}");
     }
 
     Ok(())

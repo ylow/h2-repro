@@ -175,7 +175,6 @@ version = "0.1.0"
 dependencies = [
  "color-eyre",
  "hyper",
- "lazy_static",
  "tokio",
  "tracing",
  "tracing-subscriber",
