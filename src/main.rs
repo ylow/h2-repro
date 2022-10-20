@@ -46,7 +46,7 @@ async fn real_main() -> color_eyre::Result<()> {
         let req = Request::builder()
             .uri("http://localhost:6400")
             .method(Method::POST)
-            .body(vec![0u8; 256 * 1024].into())?;
+            .body(vec![0u8; 65535 + 1].into())?;
         let tx = tx.clone();
         let client = client.clone();
         tokio::spawn(async move {
