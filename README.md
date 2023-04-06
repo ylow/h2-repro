@@ -10,3 +10,4 @@ The key difference is a lot more requests are made, (8k), but handled through
 a futured buffered stream so no more than 100 are accepted concurrently.
 `cargo run --release` is enough to show the problem. 
 
+Generally hangs after about 4K requests.
