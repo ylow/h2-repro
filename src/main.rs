@@ -83,8 +83,10 @@ async fn run_test(h2_only: bool, h2_max_streams: u32, h2_requests: u32) -> eyre:
     while let Some(resp) = strm.next().await {
         ctr += 1;
         eprintln!("{ctr} done");
-        tx.send(resp).await;
+        let _ = tx.send(resp).await;
     }
+    // everything after this is irrelevant if hangs
+
     /*
     for _ in 0..h2_requests {
         let req = Request::builder()
